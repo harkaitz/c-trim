@@ -2,29 +2,37 @@ DESTDIR   =
 PREFIX    =/usr/local
 CC        =gcc
 CFLAGS    =-Wall -g
-PROG_TRIM =tools/trim$(EXE)
+PROGRAMS  =tools/trim$(EXE)
 
-all: $(PROG_TRIM)
+## --------------
+all: $(PROGRAMS)
 clean:
-	rm -f $(PROG_TRIM)
-install: $(PROG_TRIM)
+	rm -f $(PROGRAMS)
+install: $(PROGRAMS)
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	mkdir -p $(DESTDIR)$(PREFIX)/include/str
-	cp $(PROG_TRIM) $(DESTDIR)$(PREFIX)/bin
-	cp trim.h       $(DESTDIR)$(PREFIX)/include/str
-$(PROG_TRIM): tools/trim.c trim.h
+	cp $(PROGRAMS) $(DESTDIR)$(PREFIX)/bin
+	cp trim.h      $(DESTDIR)$(PREFIX)/include/str
+
+## --------------
+tools/trim$(EXE): tools/trim.c trim.h
 	$(CC) -o $@ tools/trim.c $(CFLAGS)
 
 
 ## -- manpages --
-install: install-man
-install-man: ./trim.3.md 
+ifneq ($(PREFIX),)
+MAN_3=./trim.3 
+install: install-man3
+install-man3: $(MAN_3)
 	mkdir -p $(DESTDIR)$(PREFIX)/share/man/man3
-	cp ./trim.3 $(DESTDIR)$(PREFIX)/share/man/man3
+	cp $(MAN_3) $(DESTDIR)$(PREFIX)/share/man/man3
+endif
 ## -- manpages --
 ## -- license --
+ifneq ($(PREFIX),)
 install: install-license
 install-license: LICENSE
 	mkdir -p $(DESTDIR)$(PREFIX)/share/doc/c-trim
 	cp LICENSE $(DESTDIR)$(PREFIX)/share/doc/c-trim
+endif
 ## -- license --
