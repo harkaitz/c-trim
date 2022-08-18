@@ -20,7 +20,7 @@ char *trim(char *val) {
 }
 
 static inline
-char *trim_s (char *val) {
+void trim2 (char *val) {
     char *p = trim(val);
     if (p != val) {
         char *d;
@@ -29,7 +29,33 @@ char *trim_s (char *val) {
         }
         *d = '\0';
     }
-    return val;
+}
+
+static inline
+void trim_gaps2(char to[], const char fr[], const char _spaces[]) {
+    const char    *spaces  = (_spaces)  ? _spaces  : "\r\n ";
+    int            space   = 1;
+    int            start   = 1;
+    const char    *f       = fr;
+    char          *t       = to;
+
+    for (f = fr, t = to, space = 1; *f; f++) {
+        if (strchr(spaces, *f)) {
+            space = 1;
+        } else {
+            if (space && !start) {
+                *(t++) = ' ';
+            }
+            *(t++) = *f;
+            space = start = 0;
+        }
+    }
+    *t = '\0';
+}
+
+static inline
+void trim_gaps(char b[], char const _spaces[]) {
+    trim_gaps2(b, b, _spaces);
 }
 
 

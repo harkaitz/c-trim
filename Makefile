@@ -2,7 +2,7 @@ DESTDIR   =
 PREFIX    =/usr/local
 CC        =gcc
 CFLAGS    =-Wall -g
-PROGRAMS  =tools/trim$(EXE)
+PROGRAMS  =tools/trim$(EXE) tools/trim-gaps$(EXE)
 
 ## --------------
 all: $(PROGRAMS)
@@ -16,7 +16,9 @@ install: $(PROGRAMS)
 
 ## --------------
 tools/trim$(EXE): tools/trim.c trim.h
-	$(CC) -o $@ tools/trim.c $(CFLAGS)
+	$(CC) -o $@ tools/trim.c $(CPPFLAGS) $(CFLAGS)
+tools/trim-gaps$(EXE): tools/trim-gaps.c trim.h
+	$(CC) -o $@ tools/trim-gaps.c $(CPPFLAGS) $(CFLAGS)
 
 
 ## -- manpages --
