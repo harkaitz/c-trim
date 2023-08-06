@@ -1,3 +1,5 @@
+PROJECT   =c-trim
+VERSION   =1.0.0
 DESTDIR   =
 PREFIX    =/usr/local
 CC        =cc
@@ -18,15 +20,21 @@ tools/trim$(EXE): tools/trim.c trim.h
 	$(CC) -o $@ tools/trim.c $(CPPFLAGS) $(CFLAGS)
 tools/trim-gaps$(EXE): tools/trim-gaps.c trim.h
 	$(CC) -o $@ tools/trim-gaps.c $(CPPFLAGS) $(CFLAGS)
-## -- manpages --
-install: install-man3
-install-man3:
+## -- BLOCK:license --
+install: install-license
+install-license: 
+	mkdir -p $(DESTDIR)$(PREFIX)/share/doc/$(PROJECT)
+	cp LICENSE README.md $(DESTDIR)$(PREFIX)/share/doc/$(PROJECT)
+update: update-license
+update-license:
+	ssnip README.md
+## -- BLOCK:license --
+## -- BLOCK:man --
+update: update-man
+update-man:
+	make-h-man update
+install: install-man
+install-man:
 	mkdir -p $(DESTDIR)$(PREFIX)/share/man/man3
 	cp ./trim.3 $(DESTDIR)$(PREFIX)/share/man/man3
-## -- manpages --
-## -- license --
-install: install-license
-install-license: LICENSE
-	mkdir -p $(DESTDIR)$(PREFIX)/share/doc/c-trim
-	cp LICENSE $(DESTDIR)$(PREFIX)/share/doc/c-trim
-## -- license --
+## -- BLOCK:man --
